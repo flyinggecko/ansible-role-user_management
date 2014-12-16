@@ -1,0 +1,12 @@
+---
+# defaults file for user_management
+default_home: "/home/{{ item.name }}"
+
+# tmp vars for authorized_keys
+user_state: "{{ item.0.state | default('present') }}"
+
+# create empty users array
+users: []
+users_all: []
+users_group: []
+users_host: []

@@ -1,0 +1,18 @@
+---
+# let the user join only the groups that exist on the remote host
+
+#- name: get existing groups on host
+- shell: "getent group | cut -f 1 -d':' | tr '\\n' ','"
+  register: existing_groups
+
+- name: put user in the existing groups
+  user:
+    name: "{{ item.0.name }}"
+    append: yes
+    groups: "{{ item.1 | default('') }}"
+  with_subelements:
+    - users
+    - groups
+  when:
+    item.1 is defined
+    and item.1 in existing_groups.stdout

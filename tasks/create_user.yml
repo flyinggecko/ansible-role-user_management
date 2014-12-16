@@ -1,0 +1,29 @@
+---
+# create users
+
+- name: creates users
+  user:
+    name: "{{ item.name }}"
+    comment: "{{ item.comment | default(item.name) }}, maintained by Ansible"
+    uid: "{{ item.uid }}"
+    home: "{{ item.home | default(default_home) }}"
+    shell: "{{ item.shell | default('/usr/bin/zsh') }}"
+    password: "{{ item.password | default('!') }}"
+    state: "{{ item.state | default('present') }}"
+    remove: "{{ item.remove | default('yes') }}"
+  with_items: users
+  when:
+    item.name is defined
+    and item.uid is defined
+
+- name: deploy authorized_keys
+  authorized_key:
+    user: "{{ item.0.name }}"
+    key: "{{ item.1.key }}"
+    state: "{{ item.1.state | default('present') }}"
+  with_subelements:
+    - users
+    - authorized_keys
+  when:
+    item.1.key is defined
+    and user_state == "present"
