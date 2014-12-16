@@ -11,7 +11,9 @@ None
 Role Variables
 --------------
 `default_home`: Default path for home (/home/*name*)
+
 `user_state`: Temporary var for the user state (defaults to present)
+
 `users_{host,group,all}`: Array with users
 
     users_{host,group,all}:
