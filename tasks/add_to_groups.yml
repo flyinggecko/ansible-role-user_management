@@ -4,6 +4,7 @@
 #- name: get existing groups on host
 - shell: "getent group | cut -f 1 -d':' | tr '\\n' ','"
   register: existing_groups
+  changed_when: False
 
 - name: put user in the existing groups
   user:
