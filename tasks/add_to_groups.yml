@@ -15,4 +15,5 @@
     - groups
   when:
     item.1 is defined
+    and user_state == "present"
     and item.1 in existing_groups.stdout
