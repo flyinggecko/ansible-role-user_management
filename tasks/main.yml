@@ -1,6 +1,8 @@
 ---
 # tasks file for user_management
 
+- include: custom_groups.yml
+
 - include: create_user.yml users="{{ users_all | union(users_group) | union(users_host) }}"
 
 - include: add_to_groups.yml users="{{ users_all | union(users_group) | union(users_host) }}"

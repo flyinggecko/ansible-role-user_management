@@ -1,0 +1,15 @@
+---
+
+- name: "create custom groups"
+  group:
+    gid: "{{ item.gid }}"
+    name: "{{ item.name }}"
+    state: '{{ item.state | default("present") }}'
+    system: '{{ item.system | default("no") }}'
+  with_flattened:
+    - groups_all
+    - groups_group
+    - groups_host
+  when:
+    item.name is defined
+    and item.gid is defined
