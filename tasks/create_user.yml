@@ -27,3 +27,11 @@
   when:
     item.1.key is defined
     and user_state == "present"
+
+- name: set owner/group/mode for home dir
+  file:
+    path: "{{ users_real_home }}"
+    owner: "{{ users_real_owner }}"
+    group: "{{ users_real_group }}"
+    mode: "{{ users_real_mode }}"
+  with_items: users

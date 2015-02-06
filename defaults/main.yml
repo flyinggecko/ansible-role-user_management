@@ -1,6 +1,10 @@
 ---
 # defaults file for user_management
 default_home: "/home/{{ item.name }}"
+users_real_home: "{{ item.home | default(default_home) }}"
+users_real_owner: "{{ home_owner | default(item.name)}}"
+users_real_group: "{{ home_group | default(item.name)}}"
+users_real_mode: "{{ home_mode | default('0740')}}"
 
 # tmp userstate var for the authorized_keys
 user_state: "{{ item.0.state | default('present') }}"
