@@ -16,21 +16,33 @@ Role Variables
 
 `users_{host,group,all}`: Array with users
 
-    users_{host,group,all}:
-      - name: foo (required)
-        uid: 1000 (required)
-        comment: any comment you want (optional)
-        password: Hash of the password (optional, defaults to '!')
-        shell: /usr/bin/bash (optinal, defaults to /usr/bin/zsh)
-        home: /home/foo2 (optional, defaults to /home/{name})
-        remove: no (optional, defaults to yes)
-        state: present (optional, defaults to present)
-        authorized_keys:
-        - key: (optional)
-          state: present (optional, defaults to present)
-        groups:
-        - .. (optional, these groups will be appened to the users groups.
-              When a group does not exist on a host, it will be skipped.)
+```yaml
+users_{host,group,all}:
+  - name: foo (required)
+    uid: 1000 (required)
+    comment: any comment you want (optional)
+    password: Hash of the password (optional, defaults to '!')
+    shell: /usr/bin/bash (optinal, defaults to /usr/bin/zsh)
+    home: /home/foo2 (optional, defaults to /home/{name})
+    remove: no (optional, defaults to yes)
+    state: present (optional, defaults to present)
+    authorized_keys: (There is a bug, so you need to add this at least )
+    - key: (optional)
+      state: present (optional, defaults to present)
+    groups:
+    - .. (optional, these groups will be appened to the users groups.
+          When a group does not exist on a host, it will be skipped.)
+    home_owner: "foo" (this user/group should exist on the host)
+    home_group: "foo" (this user/group should exist on the host)
+    home_mode: "0740"
+```
+`groups_{host,group,all}`: Array of groups to create
+```yaml
+groups_{host,group,all}:
+  - name: "blub"
+    gid: "5000"
+```
+
 
 Dependencies
 ------------
@@ -42,20 +54,23 @@ Example Playbook
 
 `some_host_vars.yml`:
 
-    users_group
-      - name: foo
-        uid: 1001
-        groups:
-        - sudo
-        - audio
-        - fuse
-
+```yaml
+users_group
+  - name: foo
+    uid: 1001
+    groups:
+    - sudo
+    - audio
+    - fuse
+```
 `some_playbook.yml`:
 
-    - hosts: managed_users
-      sudo: yes
-      roles:
-      - user_management
+```yaml
+- hosts: managed_users
+  sudo: yes
+  roles:
+  - user_management
+```
 
 License
 -------
