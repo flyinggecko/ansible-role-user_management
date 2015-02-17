@@ -2,7 +2,8 @@
 # let the user join only the groups that exist on the remote host
 
 #- name: get existing groups on host
-- shell: "getent group | cut -f 1 -d':' | tr '\\n' ','"
+- name: get a list of existing groups
+  shell: "getent group | cut -f 1 -d':' | tr '\\n' ','"
   register: existing_groups
   changed_when: False
 
