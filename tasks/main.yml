@@ -6,3 +6,5 @@
 - include: create_user.yml users="{{ users_all | union(users_group) | union(users_host) }}"
 
 - include: add_to_groups.yml users="{{ users_all | union(users_group) | union(users_host) }}"
+
+- include: clone_dotfiles.yml users="{{ users_all | union(users_group) | union(users_host) }}"

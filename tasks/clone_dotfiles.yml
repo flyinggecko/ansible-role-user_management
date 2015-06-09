@@ -1,0 +1,32 @@
+---
+
+- name: clone dotfiles, when they exist
+  git:
+    accept_hostkey: "yes"
+    repo: "{{ item.clone_dotfiles }}"
+    dest: "{{ users_real_home }}/.config/dotfiles"
+    key_file: "{{ users_real_home }}/.ssh/id_rsa"
+    update: "no"
+  with_items: users
+  when:
+    item.clone_dotfiles is defined
+
+- name: change ownership of files
+  file:
+    dest: "{{ users_real_home }}/.config/dotfiles"
+    owner: "{{ users_real_owner }}"
+    group: "{{ users_real_group }}"
+    mode: "u=rwx,g=rx,o=rx"
+    recurse: "yes"
+    state: "directory"
+  with_items: users
+  when:
+    item.clone_dotfiles is defined
+
+# - name: link dotfiles
+#   shell: "for file in $(ls -d *); do file=${file/\*/}; ln -fs $file {{ users_real_home }}/.$file; done"
+#   args:
+#     chdir: "{{ users_real_home }}/.config/dotfiles/"
+#   with_items: users
+#   when:
+#     item.clone_dotfiles is defined
