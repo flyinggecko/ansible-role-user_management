@@ -16,6 +16,29 @@
     item.name is defined
     and item.uid is defined
 
+- name: copy dotfiles
+  copy:
+    src: "{{ item.name }}/"
+    dest: "{{ users_real_home }}/.config/dotfiles"
+    owner: "{{ users_real_owner }}"
+    group: "{{ users_real_group }}"
+    directory_mode: "u=rwx,g=rx"
+  with_items: users
+  when:
+    item.copy_dotfiles is defined
+    and item.copy_dotfiles == "true"
+
+- name: link dotfiles
+  shell: 'for file in $(ls -d *); do file=${file/\*/}; ln -s {{ users_real_home }}/.config/dotfiles/$file {{ users_real_home }}/.$file; chown {{ users_real_owner }}:{{ users_real_group }} {{ users_real_home }}/.$file; done'
+  args:
+    chdir: "{{ users_real_home }}/.config/dotfiles/"
+    executable: "/bin/bash"
+  with_items: users
+  when:
+    item.copy_dotfiles is defined
+    and item.copy_dotfiles == "true"
+  changed_when: False
+
 - name: deploy authorized_keys
   authorized_key:
     user: "{{ item.0.name }}"
